@@ -12,30 +12,41 @@
 using namespace std;
 
 int minSubArrayLen(int s, vector<int>& nums) {
+    if (nums.size() == 0){
+        return 0;
+    }
     int beginPtr = 0, endPtr = 0;
-    int arraySize = 1000000;
+    int arraySize = nums.size();
     int sum = 0;
-    while(endPtr < nums.size()){
+    while(beginPtr < nums.size()-1){
         //If that sum is smaller, make window larger
-        if(sum < s){
-            cout << "Running through the if\n";
+        if(sum < s && endPtr < nums.size()-1){
+            cout << "First conditional\n";
             sum += nums[endPtr];
+            //To prevent endPtr from adding over and over while at the end
+//            if(endPtr < nums.size()-1 && endCounter < 5){
+//                sum += nums[endPtr];
+//                endCounter++;
+//            }
+            if(endPtr < nums.size()-1){
+                endPtr++;
+            }
             cout << "beginPtr:" << beginPtr << " beginPtrValue:" << nums[beginPtr] << " endPtr:"<< endPtr << " endPtrValue:" << nums[endPtr] << "\n";
-            cout << "sum: " << sum << "\n";
-            endPtr++;
-            continue;
+            cout << "sum after addition: " << sum << "\n";
+            cout << "arraySize: " << arraySize << "\n";
         }
         //If sum is larger, compare window size and make window smaller
-        if(sum >= s){
-            cout << "Running through the else if\n";
+        else if(sum >= s){
+            cout << "Second conditional\n";
             sum -= nums[beginPtr];
-            cout << "beginPtr:" << beginPtr << " beginPtrValue:" << nums[beginPtr] << " endPtr:"<< endPtr << " endPtrValue:" << nums[endPtr] << "\n";
-            cout << "sum: " << sum << "\n";
-            if((endPtr - beginPtr) < arraySize){
-                arraySize = endPtr - beginPtr;
-            }
-            cout << "arraySize: " << arraySize << "\n";
             beginPtr++;
+            arraySize = min(endPtr - beginPtr, arraySize);
+            cout << "beginPtr:" << beginPtr << " beginPtrValue:" << nums[beginPtr] << " endPtr:"<< endPtr << " endPtrValue:" << nums[endPtr] << "\n";
+            cout << "sum after subtraction: " << sum << "\n";
+            cout << "arraySize: " << arraySize << "\n";
+        }
+        else{
+            return arraySize;
         }
     }
     return arraySize;
